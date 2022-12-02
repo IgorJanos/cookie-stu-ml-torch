@@ -19,8 +19,8 @@ docker run \
     --privileged \
     --shm-size 8g \
     -v "${CWD}/..":/workspace \
-    --mount type=bind,source="/mnt/scratch/${USER_NAME}",target=/mnt/scratch \
-    --mount type=bind,source="/mnt/persist/${USER_NAME}",target=/mnt/persist \
+    --mount type=volume,source="/mnt/scratch/${USER_NAME}",target=/mnt/scratch \
+    --mount type=volume,source="/mnt/persist/${USER_NAME}",target=/mnt/persist \
     --mount type=bind,source="/mnt/cache",target=/mnt/cache \
     -e CUDA_VISIBLE_DEVICES="${DEVICE}" \
     ${IMAGE_TAG} \
