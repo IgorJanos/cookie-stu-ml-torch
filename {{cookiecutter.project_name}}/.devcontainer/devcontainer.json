@@ -25,15 +25,15 @@
 		"--gpus", "all", "--privileged",
 		"--network=bridge",
 		"--shm-size", "8g",
-		"-e", "CUDA_VISIBLE_DEVICES=0"
+		"-e", "CUDA_VISIBLE_DEVICES=0",
+
+		// Volumes
+		"-v", "/mnt/scratch/${env:USER}:/mnt/scratch",
+		"-v", "/mnt/persist/${env:USER}:/mnt/persist",
+		"-v", "/mnt/cache:/mnt/cache"
 	],
 
 	"mounts": [ 
-        // Disk locations
-        "source=/mnt/scratch/${env:USERPROFILE},target=/mnt/scratch,type=volume",
-        "source=/mnt/persist/${env:USERPROFILE},target=/mnt/persist,type=volume",
-        "source=/mnt/cache,target=/mnt/cache,type=volume",
-
         // Git & Other credentials
 		"source=${env:HOME}${env:USERPROFILE}/.gitconfig,target=/root/.gitconfig,type=bind,readonly",
 		"source=${env:HOME}${env:USERPROFILE}/.netrc,target=/root/.netrc,type=bind"
@@ -42,6 +42,4 @@
 	// Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
 	// "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ]
 
-	// Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
-	//"remoteUser": "root"
 }
