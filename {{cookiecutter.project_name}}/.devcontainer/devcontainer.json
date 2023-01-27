@@ -32,16 +32,17 @@
 		"-v", "/mnt/nfs-data:/mnt/nfs-data",
 		"-v", "/mnt/scratch/${localEnv:USER}/${localWorkspaceFolderBasename}:/workspace/${localWorkspaceFolderBasename}/.mnt/scratch",
 		"-v", "/mnt/persist/${localEnv:USER}/${localWorkspaceFolderBasename}:/workspace/${localWorkspaceFolderBasename}/.mnt/persist",
-		"-v", "/mnt/cache:/mnt/cache"
+		"-v", "${localEnv:HOME}/.netrc:/root/.netrc"
 	],
 
 	"mounts": [ 
         // Git & Other credentials
-		"source=${env:HOME}${env:USERPROFILE}/.gitconfig,target=/root/.gitconfig,type=bind,readonly",
-		"source=${env:HOME}${env:USERPROFILE}/.netrc,target=/root/.netrc,type=bind"
-	]
+		"source=${localEnv:HOME}/.gitconfig,target=/root/.gitconfig,type=bind,readonly"
+	],
 
 	// Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
 	// "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ]
 
+	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace/${localWorkspaceFolderBasename},type=bind",
+	"workspaceFolder": "/workspace/${localWorkspaceFolderBasename}"
 }
