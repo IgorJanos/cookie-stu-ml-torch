@@ -7,21 +7,25 @@ CWD=$(readlink -e "$(dirname "$0")")
 cd "${CWD}/.." || exit $?
 source ./docker/common.sh
 
-DEVICE=0
+DEVICE=$1
 echo "Using GPU devices: ${DEVICE}"
 
 export USER_NAME=$(whoami)
+echo "User: ${USER_NAME}"
+
 
 docker run \
     -it --rm \
-    --name "{{cookiecutter.project_name}}" \
+    --name "{{cookiecutter.project_name}}-${DEVICE}" \
     --gpus all \
     --privileged \
     --shm-size 8g \
-    -v "${CWD}/..":/workspace \
-    -v "/mnt/scratch/${USER_NAME}":/mnt/scratch \
-    -v "/mnt/persist/${USER_NAME}":/mnt/persist \
-    -v "/mnt/cache":/mnt/cache \
+    --device /dev/fuse \
+    -v "${HOME}/.netrc":/root/.netrc \
+    -v "${CWD}/..":/workspace/${PROJECT_NAME} \
+    -v "/mnt/scratch/${USER}/.datasets":/mnt/datasets \
+    -v "/mnt/nfs-data":/mnt/nfs-data \
+    -v "/mnt/scratch/${USER}/${PROJECT_NAME}":/workspace/${PROJECT_NAME}/.mnt/scratch \
+    -v "/mnt/persist/${USER}/${PROJECT_NAME}":/workspace/${PROJECT_NAME}/.mnt/persist \
     -e CUDA_VISIBLE_DEVICES="${DEVICE}" \
-    ${IMAGE_TAG} \
-    "$@" || exit $?
+    ${IMAGE_TAG} 
